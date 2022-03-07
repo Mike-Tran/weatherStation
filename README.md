@@ -2,7 +2,7 @@
 Single page weather app that shows the current weather for the week in a designated location
 
 ## Core Deliverables
-As a user I would like to see the following
+- As a user I would like to see the following
     - Single page application
     - Event Listener: DocumentContentLoaded
     - Today’s date
@@ -18,6 +18,7 @@ As a user I would like to see the following
         - Event Listener: Form submission
     - Celsius to Fahrenheit conversion
         - Event Listener: Button click (button indicates which system is used)
+
 ## Stretch 
-    - Have location cards for previously searched zip codes
-        - This would be a POST request 
+- Have location cards for previously searched zip codes
+    - This would be a POST request 
