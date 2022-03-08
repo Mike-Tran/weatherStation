@@ -20,10 +20,29 @@ So that I do not need to click through multiple buttons to view one piece of wea
 
 ![alt text](https://github.com/Mike-Tran/weatherStation/blob/main/frank-wireframe-screenshot.png)
 
+## API:
+
+OpenWeather: https://openweathermap.org/api
+
+## Goals:
+
+Single page application
+Event Listener: DocumentContentLoaded
+Today’s date
+The current temperature
+The weeks temperature 
+Detailed information on today's weather
+Humidity
+Pressure
+Wind speed
+Highs and lows
+Etc.
+Input form to query a US zip code and area
+Event Listener: Form submission
+Celsius to Fahrenheit conversion
+Event Listener: Button click (button indicates which system is used)
+
 ## Stretch Goals:
 
 Have location cards for previuosly searched zip codes (This would be a POST request)
 
-## API:
-
-OpenWeather: https://openweathermap.org/api
