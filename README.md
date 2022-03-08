@@ -1,6 +1,6 @@
 # weatherStation
 
-This is a single page weather app that shows the current weather for the week for any zip code within the United Sates, with detailed information including precipitation, wind speed, and humidity.
+This is a single page weather app that shows the current weather for the week for any zip code within the United Sates, with detailed information including precipitation, wind speed, and humidity. Information will be retrieved from the OpenWeather API.
 
 ## User Stories:
 
