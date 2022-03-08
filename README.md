@@ -23,3 +23,7 @@ So that I do not need to click through multiple buttons to view one piece of wea
 ## Stretch Goals:
 
 Have location cards for previuosly searched zip codes (This would be a POST request)
+
+## API:
+
+OpenWeather: https://openweathermap.org/api
