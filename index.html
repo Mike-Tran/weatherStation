@@ -19,50 +19,34 @@
       </div>
     </header>
 
-    <div id="weatherOverview">
-      <div class="weatherCard" style="width: 18rem;">
-        <div class="card-body">
-          <h3 class="card-title" id="todaysDate">Today</h3>
-          <p class="card-text"></p>
-          <h1 id="currentTemp"></h1>
+    <div id="weatherContainer">
+      <div id="weatherOverview">
+        <div class="weatherCard" style="width: 18rem;">
+          <div class="card-body">
+            <h3 class="card-title" id="todaysDate">Today</h3>
+            <p class="card-text"></p>
+            <h1 id="currentTemp"></h1>
+          </div>
+        </div>
+
+        <!-- PLACEHOLDERS: This should be populated with JS to reduce code redundancy -->
+        <div class="weekViewContainer">
+
+          <!-- EXAMPLE DAY CARD -->
+          <!-- 
+          <div class="dayCard">
+            <i class="fa-8x bi bi-cloud-sun"></i>
+          </div> -->
+          
         </div>
       </div>
 
-      <!-- PLACEHOLDERS: This should be populated with JS to reduce code redundancy -->
-      <div class="detailContainer">
-        <div class="detail">
-          <i class="fa-8x bi bi-cloud-sun"></i>
-          <div class="card-body">
-          </div>
-        </div>
-
-        <div class="detail">
-          <i class="fa-8x bi bi-cloud-rain"></i>
-          <div class="card-body">
-          </div>
-        </div>
-
-        <div class="detail">
-          <i class="fa-8x bi bi-cloud-hail"></i>
-          <div class="card-body">
-          </div>
-        </div>
-
-        <div class="detail">
-          <i class="fa-8x bi bi-cloud-sun"></i>
-          <div class="card-body">
-          </div>
-        </div>
-
-        <div class="detail">
-          <i class="fa-8x bi bi-cloud-hail"></i>
-          <div class="card-body">
-          </div>
-        </div>
-
+      <div id="detailContainer">
+        <h3 class="detailTitle">Details</h3>
       </div>
-
     </div>
+
+
 
   </body>
 </html>

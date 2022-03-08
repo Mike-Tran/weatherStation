@@ -14,11 +14,10 @@ const weatherIcons = {
 
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
     const currentTemp = document.querySelector('#currentTemp');
     const tempFormatBtn = document.querySelector('#tempFormatBtn');
-    
+
     init();
 
     tempFormatBtn.addEventListener('click', function() {
@@ -45,6 +44,27 @@ function renderWeatherCards(weeksWeather) {
     currentTempInKelvin = weeksWeather.current.temp;
     currentTemp.textContent = kelvinToFarenheit(weeksWeather.current.temp) + '°';
     getDate();
+
+    for(let i = 0; i < 5; i++) {
+        renderSingleWeatherCard(weeksWeather.daily[i]);
+    }
+
+}
+
+function renderSingleWeatherCard(weatherInfo) {
+    const weekViewContainer = document.querySelector('.weekViewContainer');
+    const card = document.createElement('div');
+    card.className = 'dayCard';
+
+    // link weather forecast for this day to icon and append to card
+    const weatherIcon = document.createElement('i');
+    weatherIcon.className = "fa-8x bi bi-cloud-sun";
+
+    const dayTemp = document.createElement('h2');
+    dayTemp.className = 'center';
+    dayTemp.textContent = `${kelvinToFarenheit(weatherInfo.temp.day)}°`;
+    card.append(weatherIcon, dayTemp);
+    weekViewContainer.append(card);
 }
 
 function getDate() {

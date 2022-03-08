@@ -1,5 +1,6 @@
 body {
     background-color: #0baed9;
+    color: white;
 }
 
 #locationForm {
@@ -7,9 +8,7 @@ body {
 }
 
 #weatherOverview {
-    padding: 50px 0px;
     border-bottom: 1px solid white;
-    margin: 0px 75px;
     display: flex;
 }
 
@@ -24,28 +23,46 @@ body {
 
 .weatherCard {
     background-color: transparent;
-    color: white;
 }
 
 .weatherDetails {
     display: flex;
     width:100%;
     margin: 25px 75px;
-
+    
 }
-.detailContainer {
+.weekViewContainer {
     margin: 0px 50px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    color: white;
 }
 
-.detail {
+.dayCard {
     padding: 0px 50px;
     float: left;
 }
 
-.weatherDetails .list-group .list-group-item {
-    background-color: transparent;
+#weatherContainer {
+    padding: 50px 0px;
+    margin: 0px 75px;
+}
+
+#detailContainer {
+    padding-top: 25px;
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+}
+
+.detailCard {
+    float: left;
+}
+
+.detailTitle {
+    padding-left: 15px;
+}
+
+.center {
+    text-align: center;
 }
