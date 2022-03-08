@@ -35,13 +35,15 @@ body {
 }
 .detailContainer {
     margin: 0px 50px;
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     color: white;
 }
 
 .detail {
-    width: 20%;
     padding: 0px 50px;
+    float: left;
 }
 
 .weatherDetails .list-group .list-group-item {

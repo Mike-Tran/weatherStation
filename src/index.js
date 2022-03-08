@@ -3,10 +3,33 @@ const lat = 47.73424240534853;
 const lon = -122.30687432498033;
 const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let isFarenheit = true;
+let currentTempInKelvin;
+
+// Create object containing relavent icons for weather forcast 'light rain' etc should be 9  options
+// https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+// search for weather under bootstrap and select the outlined options
+// https://icons.getbootstrap.com/
+const weatherIcons = {
+
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const currentTemp = document.querySelector('#currentTemp');
+    const tempFormatBtn = document.querySelector('#tempFormatBtn');
+    
     init();
+
+    tempFormatBtn.addEventListener('click', function() {
+        if (isFarenheit) {
+            currentTemp.textContent = kelvinToCelcius(currentTempInKelvin) + '°';
+            isFarenheit = !isFarenheit;
+        } else {
+            currentTemp.textContent = kelvinToFarenheit(currentTempInKelvin) + '°';
+            isFarenheit = !isFarenheit;
+        }
+    });
 });
 
 
@@ -19,7 +42,7 @@ function init() {
 
 function renderWeatherCards(weeksWeather) {
     console.log(weeksWeather);
-    // debugger;
+    currentTempInKelvin = weeksWeather.current.temp;
     currentTemp.textContent = kelvinToFarenheit(weeksWeather.current.temp) + '°';
     getDate();
 }
@@ -30,12 +53,14 @@ function getDate() {
     const date = new Date();
     const month = date.toLocaleDateString('default', {month: 'long'});
     const day = date.getDay();
-    // console.log(week[date.getUTCDay()]);
-    // console.log(date);
-    todaysDate.textContent = week[date.getUTCDay()];
-    cardText.textContent = `${month} ${day}`;
+    cardText.textContent = `${week[date.getUTCDay()]}, ${month} ${day}`;
 }
 
 function kelvinToFarenheit(tempInKelvin) {
     return Math.round(((tempInKelvin-273.15)*1.8)+32);
 }
+
+function kelvinToCelcius(tempInKelvin) {
+    return Math.round(tempInKelvin-273.15);
+}
+
