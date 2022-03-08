@@ -1,0 +1,49 @@
+body {
+    background-color: #0baed9;
+}
+
+#locationForm {
+    display: flex;
+}
+
+#weatherOverview {
+    padding: 50px 0px;
+    border-bottom: 1px solid white;
+    margin: 0px 75px;
+    display: flex;
+}
+
+.card {
+    display: inline-block;
+}
+
+#currentTemp {
+    text-align: center;
+    font-size: 100px;
+}
+
+.weatherCard {
+    background-color: transparent;
+    color: white;
+}
+
+.weatherDetails {
+    display: flex;
+    width:100%;
+    margin: 25px 75px;
+
+}
+.detailContainer {
+    margin: 0px 50px;
+    display: inline-flex;
+    color: white;
+}
+
+.detail {
+    width: 20%;
+    padding: 0px 50px;
+}
+
+.weatherDetails .list-group .list-group-item {
+    background-color: transparent;
+}
