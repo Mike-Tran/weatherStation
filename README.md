@@ -24,6 +24,7 @@ So that I do not need to click through multiple buttons to view one piece of wea
 
 OpenWeather: https://openweathermap.org/api
 
+
 ## Goals:
 
 Single page application
@@ -41,6 +42,11 @@ Input form to query a US zip code and area
 Event Listener: Form submission
 Celsius to Fahrenheit conversion
 Event Listener: Button click (button indicates which system is used)
+
+Our event listeners will be the following
+Form submission
+documentContentLoaded
+Click: when a user clicks on the C/F button it will convert Celsuis to Fahrenheit, and vice versa
 
 ## Stretch Goals:
 
