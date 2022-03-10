@@ -4,16 +4,16 @@ This is a single page weather app that shows the current weather for the week fo
 
 ## User Stories:
 
-As a user I want to be able to search for any location via zip code
+As a user I want to be able to search for any location via zip code <br />
 So that I can easily and quickly choose see the weather for various locations.
 
-As a user I want to see pictures of the approximate weather forecast (sun/rain/clouds)
+As a user I want to see pictures of the approximate weather forecast (sun/rain/clouds) <br />
 So that I can make quick estimations of the weather without having to read actual numbers.
 
-As a user I want to see detailed weather information for a location
+As a user I want to see detailed weather information for a location <br />
 So that I can prepare and dress appropriately for outdoor conditions.
 
-As a user I want all information to be accessed at one glance
+As a user I want all information to be accessed at one glance <br />
 So that I do not need to click through multiple buttons to view one piece of weather data.
 
 ## Wireframe(s):
