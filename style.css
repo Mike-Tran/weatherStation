@@ -1,21 +1,29 @@
 body {
-    background-color: #0baed9;
+    background: linear-gradient(#1aaee2, #20d0be);
+    /* background: linear-gradient(#1751a7, #2ab6a3); */
+    color: white;
+    min-height: 100vh;
 }
 
 #locationForm {
     display: flex;
 }
 
-#weatherOverview {
+#weatherContainer {
     padding: 50px 0px;
-    border-bottom: 1px solid white;
     margin: 0px 75px;
+    max-width: 90%;
+    width: 1530px;
+}
+
+#weatherOverview {
+    border-bottom: 1px solid white;
     display: flex;
 }
 
-.card {
+/* .card {
     display: inline-block;
-}
+} */
 
 #currentTemp {
     text-align: center;
@@ -24,28 +32,42 @@ body {
 
 .weatherCard {
     background-color: transparent;
-    color: white;
+    width: 18rem;
 }
 
 .weatherDetails {
     display: flex;
     width:100%;
     margin: 25px 75px;
-
+    
 }
-.detailContainer {
+#weekViewContainer {
     margin: 0px 50px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    color: white;
 }
 
-.detail {
+.weatherCardContainer {
     padding: 0px 50px;
     float: left;
 }
 
-.weatherDetails .list-group .list-group-item {
-    background-color: transparent;
+#detailContainer {
+    padding-top: 25px;
+    display: flex;
+    /* justify-content: center; */
+    flex-wrap: wrap;
+}
+
+.detailCard {
+    float: left;
+}
+
+.detailTitle {
+    padding-left: 15px;
+}
+
+.center {
+    text-align: center;
 }

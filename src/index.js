@@ -1,191 +1,160 @@
-const apiKey = '29d46196468dda5ecc5548f448aa899c';
-const lat = 47.73424240534853;
-const lon = -122.30687432498033;
-const weatherAPI = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=29d46196468dda5ecc5548f448aa899c`;
-const week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const detailRow = document.querySelector('#detailContainer');
+const currentTemp = document.querySelector('#currentTemp');
+const tempFormatBtn = document.querySelector('#tempFormatBtn');
+const locationForm = document.querySelector('#locationForm');
+const weekViewContainer = document.getElementById('weekViewContainer');
+const cardTemp = document.getElementsByClassName('cardTemp');
+const todaysDate = document.querySelector('#todaysDate');
+const cardText = document.querySelector('.card-text');
+
+const WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const BASE_URL = 'https://api.openweathermap.org';
+let apiKey;
 let isFarenheit = true;
-let currentTempInKelvin;
-let currentFeelsLike;
-let currentHumidity;
-let currentUvi;
-let currentWindspeed;
-let currentPrecipitation;
 
-// Create object containing relavent icons for weather forcast 'light rain' etc should be 9  options
-// https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
-// search for weather under bootstrap and select the outlined options
-// https://icons.getbootstrap.com/
-const weatherIcons = {
-
+const weekForecast = {
+    'fahrenheit': [],
+    'celsius': []
 }
 
+const weatherIconList = {
+    '01d': 'bi-brightness-low',
+    '02d': 'bi-cloud-sun',
+    '03d': 'bi-cloud',
+    '04d': 'bi-clouds',
+    '09d': 'bi-clopud-drizzle',
+    '10d': 'bi-cloud-rain-heavy',
+    '11d': 'bi-cloud-lightening',
+    '13d': 'bi-cloud-snow',
+    '50d': 'bi-cloud-fog2',
+};
 
-document.addEventListener('DOMContentLoaded', function() {
-    const currentTemp = document.querySelector('#currentTemp');
-    const tempFormatBtn = document.querySelector('#tempFormatBtn');
-    const dayoneTemp = document.querySelector('#dayoneTemp');
-    const daytwoTemp = document.querySelector('#daytwoTemp');
-    const daythreeTemp = document.querySelector('#daythreeTemp');
-    const dayfourTemp = document.querySelector('#dayfourTemp');
-    const dayfiveTemp = document.querySelector('#dayfiveTemp');
-    const feelsLike = document.querySelector('#feelslike');
-    
-    
-    init();
-
-    tempFormatBtn.addEventListener('click', function() {
-        if (isFarenheit) {
-            currentTemp.textContent = kelvinToCelcius(currentTempInKelvin) + '°';
-           
-            dayoneTemp.textContent = kelvinToCelcius(dayOneTemp) + '°';
-            
-            daytwoTemp.innerHTML = kelvinToCelcius(dayTwoTemp) + '°';
-            
-            daythreeTemp.innerHTML = kelvinToCelcius(dayThreeTemp) + '°';
-            
-            dayfourTemp.innerHTML = kelvinToCelcius(dayFourTemp) + '°';
-            
-            dayfiveTemp.innerHTML = kelvinToCelcius(dayFiveTemp) + '°';
-            
-            feelsLike.innerHTML = kelvinToCelcius(currentFeelsLike) + '°';
-            isFarenheit = !isFarenheit;
-        } else {
-            currentTemp.innerHTML = kelvinToFarenheit(currentTempInKelvin) + '°';
-            
-            dayoneTemp.innerHTML = kelvinToFarenheit(dayOneTemp) + '°';
-            
-            daytwoTemp.innerHTML = kelvinToFarenheit(dayTwoTemp) + '°';
-            
-            daythreeTemp.innerHTML = kelvinToFarenheit(dayThreeTemp) + '°';
-            
-            dayfourTemp.innerHTML = kelvinToFarenheit(dayFourTemp) + '°';
-            
-            dayfiveTemp.innerHTML= kelvinToFarenheit(dayFiveTemp) + '°';
-            
-            feelsLike.innerHTML = kelvinToFarenheit(currentFeelsLike) + '°';
-            isFarenheit = !isFarenheit;
-        }
-    });
-   
-});
-
-    const precipitation = document.querySelector('#precipitation');
-    const humidity = document.querySelector('#humidity');
-    const windspeed = document.querySelector('#windspeed');
-    const uvindex = document.querySelector('#uvindex');
-
+init();
 
 function init() {
+    getAPIKey();
+    locationForm.addEventListener('submit', (e) => getGeoCode(e));
+    tempFormatBtn.addEventListener('click', renderTemperature);
+}
+
+function getAPIKey() {
+    fetch('/config.json')
+        .then(resp => resp.json())
+        .then(function(config) {
+            apiKey = config.apiKey;
+    });
+}
+
+function renderTemperature(event) {
+    if (!!event) isFarenheit = !isFarenheit;
+
+    for (let i = 0; i < cardTemp.length; i++) {
+        cardTemp[i].textContent = `${isFarenheit ? weekForecast.fahrenheit[i] : weekForecast.celsius[i]}°`;
+        // if (i === 6) {
+        //     cardTemp[i].textContent = `Feels Like ${isFarenheit ? weekForecast.fahrenheit[i] : weekForecast.celsius[i]}°`;
+        // }
+    }
+}
+
+function getGeoCode(event) {
+    event.preventDefault();
+    const zipCode = event.target.querySelector('.form-control').value;
+    //** Stretch: user input validation */
+
+    const geoCodeAPI = `${BASE_URL}/geo/1.0/zip?zip=${zipCode},US&appid=${apiKey}`;
+    fetch(geoCodeAPI)
+        .then(response => response.json())
+        .then(function(data) {
+            getWeatherInformation(data);
+        })
+        .catch(console.error);
+
+    event.target.reset();
+}
+
+function getWeatherInformation(geocodeData) {
+    const lat = geocodeData.lat;
+    const lon = geocodeData.lon;
+    const weatherAPI = `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${apiKey}`;
+    const location = document.getElementById('weatherLocation');
+    location.textContent = geocodeData.name;
+    
     fetch(weatherAPI)
-    .then(response => response.json())
-    .then(renderWeatherCards)
-    .catch(console.error);
+        .then(response => response.json())
+        .then(renderWeatherCards)
+        .catch(console.error);
 }
 
 function renderWeatherCards(weeksWeather) {
-    console.log(weeksWeather);
-    currentTempInKelvin = weeksWeather.current.temp;
-    currentTemp.textContent = kelvinToFarenheit(currentTempInKelvin) + '°';
-    getDate();
-    currentFeelsLike = kelvinToFarenheit(weeksWeather.current.feels_like);
-    currentPrecipitation = weeksWeather.minutely[0].precipitation
-    currentHumidity = weeksWeather.current.humidity;
-    currentWindSpeed = weeksWeather.current.wind_speed;
-    currentUvIndex = weeksWeather.current.uvi;
-
-    dayOneTemp = kelvinToFarenheit(weeksWeather.daily[0].temp.day);
-    dayTwoTemp = kelvinToFarenheit(weeksWeather.daily[1].temp.day);
-    dayThreeTemp = kelvinToFarenheit(weeksWeather.daily[2].temp.day);
-    dayFourTemp = kelvinToFarenheit(weeksWeather.daily[3].temp.day);
-    dayFiveTemp = kelvinToFarenheit(weeksWeather.daily[4].temp.day);
-    renderDetailedData()
-    // renderSingleWeatherCard()
-   //  
+    clearPreviousForcast();
+    
+    for(let i = 0; i < 6; i++) {
+        if (i === 0) {
+            pushWeekForcast(weeksWeather.current.temp);
+            renderDate();
+        } else {
+            pushWeekForcast(weeksWeather.daily[i].temp.day);
+            renderSingleWeatherCard(weeksWeather.daily[i]);
+        }
+    }
+    renderTemperature();
+    renderDetailedData(weeksWeather.current);
 }
 
 function renderSingleWeatherCard(weatherInfo) {
-    let weekViewContainer = document.querySelector('.weekViewContainer');
-    weekViewContainer.innerHTML = `
-    <div class="futureCard">
-    <i class="fa-8x bi bi-cloud-sun"></i>
-    <div class="card-body">
-      <h3 class="card-title" id="dayoneDate">Tomorrow</h3>
-      <p class="card-text">${dayOneTemp}°</p>
-      <h1 id="dayoneTemp"></h1>
-    </div>
-  </div>
+    const card = document.createElement('div');
+    card.className = 'weatherCardContainer';
 
-  <div class="futureCard">
-    <i class="fa-8x bi bi-cloud-rain"></i>
-    <div class="card-body">
-      <h3 class="card-title" id="daytwoDate">Day 2</h3>
-      <p class="card-text">${dayTwoTemp}°</p>
-      <h1 id="daytwoTemp"></h1>
-    </div>
-  </div>
+    const date = new Date(weatherInfo.dt * 1000);
+    const dayCard = document.createElement('h4');
+    dayCard.className = 'dayCardTitle';
+    dayCard.textContent = WEEK[date.getDay()];
 
-  <div class="futureCard">
-    <i class="fa-8x bi bi-cloud-hail"></i>
-    <div class="card-body">
-      <h3 class="card-title" id="daythreeDate">Day 3</h3>
-      <p class="card-text">${dayThreeTemp}°</p>
-      <h1 id="daythreeTemp"></h1>
-    </div>
-  </div>
+    const dayWeatherIcon = weatherIconList[weatherInfo.weather[0].icon];
+    const weatherIcon = document.createElement('i');
+    weatherIcon.className = `fa-6x bi ${dayWeatherIcon}`;
 
-  <div class="futureCard">
-    <i class="fa-8x bi bi-cloud-sun"></i>
-    <div class="card-body">
-      <h3 class="card-title" id="dayfourDate">Day 4</h3>
-      <p class="card-text">${dayFourTemp}°</p>
-      <h1 id="dayfourTemp"></h1>
-    </div>
-  </div>
-
-  <div class="futureCard">
-    <i class="fa-8x bi bi-cloud-hail"></i>
-    <div class="card-body">
-      <h3 class="card-title" id="dayfiveDate">Day 5</h3>
-      <p class="card-text">${dayFiveTemp}°</p>
-      <h1 id="dayfiveTemp"></h1>
-    </div>
-  </div>`
+    const dayTemp = document.createElement('h2');
+    dayTemp.className = 'cardTemp center';
+    card.append(dayCard, weatherIcon, dayTemp);
+    weekViewContainer.append(card);
 }
 
-function renderDetailedData(data) {
-    let detailRow = document.querySelector('.detailContainer')
-    detailRow.innerHTML = `
-    <div class="detail">
-    <div class="card-body">
-      <h3 class="card-title">Details</h3>
-      <p class="card-text" id="feelslike">Feels Like ${currentFeelsLike}°</p>
-      <p class="card-text" id="precipitation">Precipitation ${currentPrecipitation}%</p>
-      <p class="card-text" id="humidity">Humidity ${currentHumidity}%</p>
-      <p class="card-text" id="windspeed">Wind Speed ${currentWindSpeed} mph</p>
-      <p class="card-text" id="uvindex">UV Index ${currentUvIndex}</p>
-      <h1 id="details"></h1>
-
-  </div>   `
-
-  
+function renderDetailedData(currentWeather) {
+    pushWeekForcast(currentWeather.feels_like);
+    const currentTemp = isFarenheit ? kelvinToFahrenheit(currentWeather.feels_like) : kelvinToCelsius(currentWeather.feels_like);
+    el('feelslike').textContent = `Feels Like ${currentTemp}°`;
+    el('humidity').textContent = `Humidity ${currentWeather.humidity}%`;
+    el('windspeed').textContent = `Wind Speed ${currentWeather.wind_speed} mph`;
+    el('uvindex').textContent = `UV Index ${currentWeather.uvi}`;
 }
 
-function getDate() {
-    const todaysDate = document.querySelector('#todaysDate');
-    const cardText = document.querySelector('.card-text');
+function renderDate() {
     const date = new Date();
     const month = date.toLocaleDateString('default', {month: 'long'});
-    const day = date.getDay();
-    cardText.textContent = `${week[date.getUTCDay()]}, ${month} ${day}`;
+    const day = date.getDate();
+    cardText.textContent = `${WEEK[date.getUTCDay()]}, ${month} ${day}`;
 }
 
-function kelvinToFarenheit(tempInKelvin) {
+function pushWeekForcast(tempInKelvin) {
+    weekForecast.fahrenheit.push(kelvinToFahrenheit(tempInKelvin));
+    weekForecast.celsius.push(kelvinToCelsius(tempInKelvin));
+}
+
+function kelvinToFahrenheit(tempInKelvin) {
     return Math.round(((tempInKelvin-273.15)*1.8)+32);
 }
 
-function kelvinToCelcius(tempInKelvin) {
+function kelvinToCelsius(tempInKelvin) {
     return Math.round(tempInKelvin-273.15);
 }
 
+function clearPreviousForcast() {
+    weekViewContainer.innerHTML = '';
+    weekForecast.fahrenheit = [];
+    weekForecast.celsius = [];
+}
 
-
+function el(elementId) {
+    return document.getElementById(elementId);
+}

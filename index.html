@@ -8,91 +8,44 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="https://kit.fontawesome.com/364544485e.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="./src/index.js"></script>
+    <script defer type="text/javascript" src="./src/index.js"></script>
   </head>
 
   <body>
     <header>
-      <div id="locationForm">
-        <input class="form-control" type="text" placeholder="Location e.g. Portland" aria-label="default input example">
+      <form class="input-group mb-3" id="locationForm">
+        <input type="text" class="form-control" placeholder="Location" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <input class="submit btn btn-outline-secondary" type="submit"></input>
+        </div>
         <button type="button" class="btn btn-primary" id="tempFormatBtn">C/F</button>
-      </div>
+      </form>
     </header>
 
-    <div id="weatherOverview">
-      <div class="weatherCard" style="width: 18rem;">
-        <div class="card-body">
-          <h3 class="card-title" id="todaysDate">Today</h3>
-          <p class="card-text"></p>
-          <h1 id="currentTemp"></h1>
+    <div id="weatherContainer">
+      <div id="weatherOverview">
+        <div class="weatherCard">
+          <div class="card-body">
+            <h3 class="card-title" id="todaysDate">Today</h3>
+            <p class="card-text"></p>
+            <h1 id="currentTemp" class="cardTemp"></h1>
+            <i class="bi bi-geo-alt-fill" id="weatherLocation"></i>
+          </div>
+        </div>
+        
+        <div id="weekViewContainer">
         </div>
       </div>
 
-      <!-- PLACEHOLDERS: This should be populated with JS to reduce code redundancy -->
-      <div class="weekViewContainer">
-        <div class="futureCard">
-          <i class="fa-8x bi bi-cloud-sun"></i>
-          <div class="card-body">
-            <h3 class="card-title" id="dayoneDate">Tomorrow</h3>
-            <p class="card-text"></p>
-            <h1 id="dayoneTemp"></h1>
-          </div>
-        </div>
-
-        <div class="futureCard">
-          <i class="fa-8x bi bi-cloud-rain"></i>
-          <div class="card-body">
-            <h3 class="card-title" id="daytwoDate"></h3>
-            <p class="card-text"></p>
-            <h1 id="daytwoTemp"></h1>
-          </div>
-        </div>
-
-        <div class="futureCard">
-          <i class="fa-8x bi bi-cloud-hail"></i>
-          <div class="card-body">
-            <h3 class="card-title" id="daythreeDate"></h3>
-            <p class="card-text"></p>
-            <h1 id="daythreeTemp"></h1>
-          </div>
-        </div>
-
-        <div class="futureCard">
-          <i class="fa-8x bi bi-cloud-sun"></i>
-          <div class="card-body">
-            <h3 class="card-title" id="dayfourDate"></h3>
-            <p class="card-text"></p>
-            <h1 id="dayfourTemp"></h1>
-          </div>
-        </div>
-
-        <div class="futureCard">
-          <i class="fa-8x bi bi-cloud-hail"></i>
-          <div class="card-body">
-            <h3 class="card-title" id="dayfiveDate"></h3>
-            <p class="card-text"></p>
-            <h1 id="dayfiveTemp"></h1>
-          </div>
-        </div>
-
-          <div class="detailContainer">
-            <div class="detail">
-              <div class="card-body">
-                <h3 class="card-title">Current Details</h3>
-                <p class="card-text" id="feelslike">Feels Like</p>
-                <p class="card-text" id="precipitation">Precipitation</p>
-                <p class="card-text" id="humidity">Humidity</p>
-                <p class="card-text" id="windspeed">Wind Speed</p>
-                <p class="card-text" id="uvindex">UV Index</p>
-                <h1 id="details"></h1>
-              </div>
-            </div>   
-          </div>
-            </div>
-
+      <div id="detailContainer">
+        <div class="card-body detail">
+          <h3 class="card-title">Weather Details</h3>
+          <p class="card-text cardTemp" id="feelslike"></p>
+          <!-- <p class="card-text" id="precipitation"></p> -->
+          <p class="card-text" id="humidity"></p>
+          <p class="card-text" id="windspeed"></p>
+          <p class="card-text" id="uvindex"></p>
+        </div>   
       </div>
-
-    </div>
-
-  </body>
+    </body>
 </html>
