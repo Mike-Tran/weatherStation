@@ -19,34 +19,80 @@
       </div>
     </header>
 
-    <div id="weatherContainer">
-      <div id="weatherOverview">
-        <div class="weatherCard" style="width: 18rem;">
+    <div id="weatherOverview">
+      <div class="weatherCard" style="width: 18rem;">
+        <div class="card-body">
+          <h3 class="card-title" id="todaysDate">Today</h3>
+          <p class="card-text"></p>
+          <h1 id="currentTemp"></h1>
+        </div>
+      </div>
+
+      <!-- PLACEHOLDERS: This should be populated with JS to reduce code redundancy -->
+      <div class="weekViewContainer">
+        <div class="futureCard">
+          <i class="fa-8x bi bi-cloud-sun"></i>
           <div class="card-body">
-            <h3 class="card-title" id="todaysDate">Today</h3>
+            <h3 class="card-title" id="dayoneDate">Tomorrow</h3>
             <p class="card-text"></p>
-            <h1 id="currentTemp"></h1>
+            <h1 id="dayoneTemp"></h1>
           </div>
         </div>
 
-        <!-- PLACEHOLDERS: This should be populated with JS to reduce code redundancy -->
-        <div class="weekViewContainer">
-
-          <!-- EXAMPLE DAY CARD -->
-          <!-- 
-          <div class="dayCard">
-            <i class="fa-8x bi bi-cloud-sun"></i>
-          </div> -->
-          
+        <div class="futureCard">
+          <i class="fa-8x bi bi-cloud-rain"></i>
+          <div class="card-body">
+            <h3 class="card-title" id="daytwoDate"></h3>
+            <p class="card-text"></p>
+            <h1 id="daytwoTemp"></h1>
+          </div>
         </div>
+
+        <div class="futureCard">
+          <i class="fa-8x bi bi-cloud-hail"></i>
+          <div class="card-body">
+            <h3 class="card-title" id="daythreeDate"></h3>
+            <p class="card-text"></p>
+            <h1 id="daythreeTemp"></h1>
+          </div>
+        </div>
+
+        <div class="futureCard">
+          <i class="fa-8x bi bi-cloud-sun"></i>
+          <div class="card-body">
+            <h3 class="card-title" id="dayfourDate"></h3>
+            <p class="card-text"></p>
+            <h1 id="dayfourTemp"></h1>
+          </div>
+        </div>
+
+        <div class="futureCard">
+          <i class="fa-8x bi bi-cloud-hail"></i>
+          <div class="card-body">
+            <h3 class="card-title" id="dayfiveDate"></h3>
+            <p class="card-text"></p>
+            <h1 id="dayfiveTemp"></h1>
+          </div>
+        </div>
+
+          <div class="detailContainer">
+            <div class="detail">
+              <div class="card-body">
+                <h3 class="card-title">Current Details</h3>
+                <p class="card-text" id="feelslike">Feels Like</p>
+                <p class="card-text" id="precipitation">Precipitation</p>
+                <p class="card-text" id="humidity">Humidity</p>
+                <p class="card-text" id="windspeed">Wind Speed</p>
+                <p class="card-text" id="uvindex">UV Index</p>
+                <h1 id="details"></h1>
+              </div>
+            </div>   
+          </div>
+            </div>
+
       </div>
 
-      <div id="detailContainer">
-        <h3 class="detailTitle">Details</h3>
-      </div>
     </div>
-
-
 
   </body>
 </html>
