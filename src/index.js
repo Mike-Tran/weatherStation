@@ -1,22 +1,23 @@
-const detailRow = document.querySelector('#detailContainer');
-const currentTemp = document.querySelector('#currentTemp');
-const tempFormatBtn = document.querySelector('#tempFormatBtn');
-const locationForm = document.querySelector('#locationForm');
-const weekViewContainer = document.getElementById('weekViewContainer');
+const detailContainer = document.querySelector('#detailContainer .cardContainerBody');
+const currentTemp = el('currentTemp');
+const tempFormatBtn = el('tempFormatBtn');
+const locationForm = el('locationForm');
+const weekViewContainer = el('weekViewContainer');
+const weatherContainer = el('weatherContainer');
+const todaysDate = el('todaysDate');
 const cardTemp = document.getElementsByClassName('cardTemp');
-const todaysDate = document.querySelector('#todaysDate');
 const cardText = document.querySelector('.card-text');
 
-const WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const BASE_URL = 'https://api.openweathermap.org';
 let apiKey;
 let isFarenheit = true;
 
+const NUMBER_OF_DAYS_SHOWN = 6;
+const BASE_URL = 'https://api.openweathermap.org';
+const WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const weekForecast = {
     'fahrenheit': [],
     'celsius': []
-}
-
+};
 const weatherIconList = {
     '01d': 'bi-brightness-low',
     '02d': 'bi-cloud-sun',
@@ -28,6 +29,12 @@ const weatherIconList = {
     '13d': 'bi-cloud-snow',
     '50d': 'bi-cloud-fog2',
 };
+const weatherCitySearchHistory = [
+    // {
+    //     'location': {},
+    //     'weatherData': {},
+    // }
+]
 
 init();
 
@@ -50,9 +57,6 @@ function renderTemperature(event) {
 
     for (let i = 0; i < cardTemp.length; i++) {
         cardTemp[i].textContent = `${isFarenheit ? weekForecast.fahrenheit[i] : weekForecast.celsius[i]}°`;
-        // if (i === 6) {
-        //     cardTemp[i].textContent = `Feels Like ${isFarenheit ? weekForecast.fahrenheit[i] : weekForecast.celsius[i]}°`;
-        // }
     }
 }
 
@@ -81,17 +85,19 @@ function getWeatherInformation(geocodeData) {
     
     fetch(weatherAPI)
         .then(response => response.json())
-        .then(renderWeatherCards)
+        .then((data) => renderWeatherCards(data, geocodeData))
         .catch(console.error);
+
+    fadeIn();
 }
 
-function renderWeatherCards(weeksWeather) {
+function renderWeatherCards(weeksWeather, geocodeData) {
     clearPreviousForcast();
     
-    for(let i = 0; i < 6; i++) {
+    for(let i = 0; i < NUMBER_OF_DAYS_SHOWN; i++) {
         if (i === 0) {
             pushWeekForcast(weeksWeather.current.temp);
-            renderDate();
+            renderDate(new Date());
         } else {
             pushWeekForcast(weeksWeather.daily[i].temp.day);
             renderSingleWeatherCard(weeksWeather.daily[i]);
@@ -99,6 +105,7 @@ function renderWeatherCards(weeksWeather) {
     }
     renderTemperature();
     renderDetailedData(weeksWeather.current);
+    weatherCitySearchHistory.push({location: geocodeData, weatherData: weeksWeather});
 }
 
 function renderSingleWeatherCard(weatherInfo) {
@@ -123,17 +130,43 @@ function renderSingleWeatherCard(weatherInfo) {
 function renderDetailedData(currentWeather) {
     pushWeekForcast(currentWeather.feels_like);
     const currentTemp = isFarenheit ? kelvinToFahrenheit(currentWeather.feels_like) : kelvinToCelsius(currentWeather.feels_like);
-    el('feelslike').textContent = `Feels Like ${currentTemp}°`;
-    el('humidity').textContent = `Humidity ${currentWeather.humidity}%`;
-    el('windspeed').textContent = `Wind Speed ${currentWeather.wind_speed} mph`;
-    el('uvindex').textContent = `UV Index ${currentWeather.uvi}`;
+
+    detailContainer.innerHTML = '';
+    renderDetailCard('feelslike', 'FEELS LIKE', `${currentTemp}°`, 'bi-thermometer-half', 'cardTemp');
+    renderDetailCard('humidity', 'HUMIDITY', `${currentWeather.humidity}%`, 'bi-moisture');
+    renderDetailCard('windspeed', 'WIND', `${currentWeather.wind_speed} mph`, 'bi-wind');
+    renderDetailCard('uvindex', 'UV INDEX', `${currentWeather.uvi}`, 'bi-sun');
 }
 
-function renderDate() {
-    const date = new Date();
+function renderDetailCard(elementId, cardInfoTitleText, cardInfoDataText, icon = "", additionalClass = "") {
+    const card = document.createElement('div');
+    card.className = 'card detailCardContainer card-body';
+    
+    const cardInfo = document.createElement('div');
+    cardInfo.className = 'cardInfo cardSubContainer';
+
+    const cardInfoTitle = document.createElement('p');
+    cardInfoTitle.className = 'cardInfoTitle';
+    cardInfoTitle.textContent = cardInfoTitleText;
+
+    const cardInfoData = document.createElement('h2');
+    cardInfoData.className = `cardInfoData details-text card-text ${additionalClass}`;
+    cardInfoData.id = elementId;
+    cardInfoData.textContent = cardInfoDataText;
+
+    const cardIcon = document.createElement('i');
+    cardIcon.className = `float-right cardSubContainer cardIcon fa-4x bi ${icon}`;
+
+    cardInfo.append(cardInfoTitle, cardInfoData);
+
+    card.append(cardInfo, cardIcon);
+    detailContainer.append(card);
+}
+
+function renderDate(date) {
     const month = date.toLocaleDateString('default', {month: 'long'});
     const day = date.getDate();
-    cardText.textContent = `${WEEK[date.getUTCDay()]}, ${month} ${day}`;
+    cardText.textContent = `${WEEK[date.getDay()]}, ${month} ${day}`;
 }
 
 function pushWeekForcast(tempInKelvin) {
@@ -153,6 +186,11 @@ function clearPreviousForcast() {
     weekViewContainer.innerHTML = '';
     weekForecast.fahrenheit = [];
     weekForecast.celsius = [];
+}
+
+function fadeIn() {
+    weatherContainer.style.transition = "opacity 1.5s linear 0s";
+	weatherContainer.style.opacity = 1;
 }
 
 function el(elementId) {
