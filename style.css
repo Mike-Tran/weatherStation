@@ -60,6 +60,9 @@ body {
 .weatherCard {
     background-color: transparent;
     width: 18rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .dayCardTitle {
     text-align: center;
@@ -139,8 +142,25 @@ body {
     display: inline-block;
 }
 
+#locationContainer {
+    display: flex;
+}
+
 #weatherLocation {
     padding-left: 5px;
     font-size: 22px;
 }
 
+#weatherSearchHistoryContainer {
+    padding: 0px 50px;
+    display: flex;
+}
+
+#weatherSearchHistoryContainer > * {
+    background-color: #3b4f6d;
+    color: white;
+    padding: 0px 25px;
+    margin-right: 20px;
+    border-radius: 23px;
+    height: 35px;
+}

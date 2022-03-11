@@ -4,7 +4,9 @@ const tempFormatBtn = el('tempFormatBtn');
 const locationForm = el('locationForm');
 const weekViewContainer = el('weekViewContainer');
 const weatherContainer = el('weatherContainer');
+const weatherSearchHistoryContainer = el('weatherSearchHistoryContainer');
 const todaysDate = el('todaysDate');
+const loc = el('weatherLocation');
 const cardTemp = document.getElementsByClassName('cardTemp');
 const cardText = document.querySelector('.card-text');
 
@@ -12,6 +14,7 @@ let apiKey;
 let isFarenheit = true;
 
 const NUMBER_OF_DAYS_SHOWN = 6;
+const MAX_SEARCH_HISTORY_TABS = 10;
 const BASE_URL = 'https://api.openweathermap.org';
 const WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const weekForecast = {
@@ -29,12 +32,13 @@ const weatherIconList = {
     '13d': 'bi-cloud-snow',
     '50d': 'bi-cloud-fog2',
 };
-const weatherCitySearchHistory = [
+const weatherCitySearchHistory = {
+    // 'cityName':
     // {
     //     'location': {},
     //     'weatherData': {},
     // }
-]
+}
 
 init();
 
@@ -74,7 +78,7 @@ function getGeoCode(event) {
                 throw new Error('Invalid ZIP code');
             })
             .then(function(data) {
-                getWeatherInformation(data);
+                renderWeatherInformation(data);
             })
             .catch(console.error);
 
@@ -82,24 +86,26 @@ function getGeoCode(event) {
     }
 }
 
-function getWeatherInformation(geocodeData) {
+function renderWeatherInformation(geocodeData) {
     const lat = geocodeData.lat;
     const lon = geocodeData.lon;
     const weatherAPI = `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${apiKey}`;
-    const location = document.getElementById('weatherLocation');
-    location.textContent = geocodeData.name;
     
     fetch(weatherAPI)
-        .then(response => response.json())
-        .then((data) => renderWeatherCards(data, geocodeData))
-        .catch(console.error);
-
+    .then(response => response.json())
+    .then((data) => {
+        weatherCitySearchHistory[`${geocodeData.name}`] = {location: geocodeData, weatherData: data};
+        renderWeatherCards(data, geocodeData.name);
+        addCityButton(geocodeData.name, geocodeData.zip)
+        removeOldestSearch();
+})
+    .catch(console.error);
     fadeIn();
 }
 
-function renderWeatherCards(weeksWeather, geocodeData) {
+function renderWeatherCards(weeksWeather,city) {
     clearPreviousForcast();
-    
+    loc.textContent = city;
     for(let i = 0; i < NUMBER_OF_DAYS_SHOWN; i++) {
         if (i === 0) {
             pushWeekForcast(weeksWeather.current.temp);
@@ -111,7 +117,7 @@ function renderWeatherCards(weeksWeather, geocodeData) {
     }
     renderTemperature();
     renderDetailedData(weeksWeather.current);
-    weatherCitySearchHistory.push({location: geocodeData, weatherData: weeksWeather});
+
 }
 
 function renderSingleWeatherCard(weatherInfo) {
@@ -131,6 +137,27 @@ function renderSingleWeatherCard(weatherInfo) {
     dayTemp.className = 'cardTemp center';
     card.append(dayCard, weatherIcon, dayTemp);
     weekViewContainer.append(card);
+}
+
+function addCityButton(city, zip) {
+    const newCity = document.createElement('button');
+    newCity.id = zip;
+    newCity.className = 'btn btn-primary';
+    newCity.textContent = city;
+    newCity.addEventListener('click', function() {
+        renderWeatherCards(weatherCitySearchHistory[city].weatherData, city);
+        loc.textContent = city;
+    })
+    weatherSearchHistoryContainer.append(newCity);  
+}
+
+function removeOldestSearch() {
+    if (Object.keys(weatherCitySearchHistory).length > MAX_SEARCH_HISTORY_TABS) {
+        const oldestSave = Object.keys(weatherCitySearchHistory)[0];
+        const oldestSaveZip = weatherCitySearchHistory[oldestSave].location.zip;
+        delete weatherCitySearchHistory[oldestSave];
+        el(oldestSaveZip).remove();
+    }
 }
 
 function renderDetailedData(currentWeather) {
@@ -203,6 +230,7 @@ function checkValidZipCode(zipCode) {
     const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipCode);
     if (!isValidZip) {
         alert('Invalid ZIP code!');
+        locationForm.reset();
         return false;
     }
     return true;
