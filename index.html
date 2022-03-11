@@ -17,17 +17,15 @@
       <form class="input-group mb-3" id="locationForm">
         <div id="formContainer">
           <input type="text" class="formInput form-control" placeholder="ZIP code" aria-describedby="basic-addon2">
-          <!-- <div class="input-group-append"> -->
             <button class="btn btn-outline-secondary" type="submit">
               <i class="fa fa-search"></i>
             </button>
-          <!-- </div> -->
-          
         </div>
         <button type="button" class="btn btn-primary" id="tempFormatBtn">C / F</button>
       </form>
+      <div id="weatherSearchHistory">
+      </div>
     </header>
-
 
     <div id="weatherContainer">
       <div id="weatherOverviewContainer">
@@ -49,8 +47,6 @@
       <div id="detailContainer" class="card-body detail">
           <p class="card-title">Weather Details</p>
           <div class="card-text cardContainerBody"></div>
-          <!-- <p class="card-text" id="precipitation"></p> -->
-
       </div>
     </body>
 </html>

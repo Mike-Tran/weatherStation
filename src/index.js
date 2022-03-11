@@ -64,16 +64,22 @@ function getGeoCode(event) {
     event.preventDefault();
     const zipCode = event.target.querySelector('.form-control').value;
     //** Stretch: user input validation */
+    if (checkValidZipCode(zipCode)) {
+        const geoCodeAPI = `${BASE_URL}/geo/1.0/zip?zip=${zipCode},US&appid=${apiKey}`;
+        fetch(geoCodeAPI)
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                throw new Error('Invalid ZIP code');
+            })
+            .then(function(data) {
+                getWeatherInformation(data);
+            })
+            .catch(console.error);
 
-    const geoCodeAPI = `${BASE_URL}/geo/1.0/zip?zip=${zipCode},US&appid=${apiKey}`;
-    fetch(geoCodeAPI)
-        .then(response => response.json())
-        .then(function(data) {
-            getWeatherInformation(data);
-        })
-        .catch(console.error);
-
-    event.target.reset();
+        event.target.reset();
+    }
 }
 
 function getWeatherInformation(geocodeData) {
@@ -191,6 +197,15 @@ function clearPreviousForcast() {
 function fadeIn() {
     weatherContainer.style.transition = "opacity 1.5s linear 0s";
 	weatherContainer.style.opacity = 1;
+}
+
+function checkValidZipCode(zipCode) {
+    const isValidZip = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(zipCode);
+    if (!isValidZip) {
+        alert('Invalid ZIP code!');
+        return false;
+    }
+    return true;
 }
 
 function el(elementId) {
